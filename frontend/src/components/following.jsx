@@ -61,7 +61,7 @@ export default function Following({ authToken, updateTrigger }) {
                 const a = document.createElement("a");
                 a.href = url;
 
-                // Extract filename from Content-Disposition header or use default
+                
                 const disposition = response.headers.get("Content-Disposition");
                 let filename = `${profileName}_resume.pdf`;
                 if (disposition) {

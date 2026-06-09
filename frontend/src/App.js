@@ -26,15 +26,15 @@ function App() {
       <CareerlinkNavbar />
       <Hero />
       
-      {/* Main layout containing sidebar and main sections */}
+      
       <div className="container-fluid py-5" style={{ position: "relative", minHeight: "100vh", zIndex: 10 }}>
         <div className="row px-2 px-md-4">
-          {/* Sidebar - top/full on mobile, sticky on desktop */}
+          
           <div className="col-12 col-md-3 mb-5 mb-md-0">
             <Sidebar onAuthChange={handleAuthChange} />
           </div>
           
-          {/* Main scrollable section contents */}
+          
           <div className="col-12 col-md-9">
             <div id="home" className="pt-2">
               <CareerlinkCarousel />

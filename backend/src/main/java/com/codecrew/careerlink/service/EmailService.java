@@ -48,7 +48,7 @@ public class EmailService {
                     "<br><p>Best Regards,</p>" +
                     "<p><b>Career Link Team</b></p>";
 
-            helper.setText(htmlContent, true); // Set to true to send HTML content
+            helper.setText(htmlContent, true);
             mailSender.send(message);
 
             logger.info("Welcome email successfully sent to {}", toEmail);

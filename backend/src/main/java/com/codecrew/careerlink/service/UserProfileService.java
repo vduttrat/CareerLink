@@ -50,7 +50,7 @@ public class UserProfileService {
 
     @Transactional
     public UserProfileDto uploadResume(String username, MultipartFile file) throws IOException {
-        // Find profile whose name matches the authenticated username (case-insensitive)
+        
         UserProfile profile = userProfileRepository.findAll().stream()
                 .filter(p -> p.getName().equalsIgnoreCase(username))
                 .findFirst()
@@ -71,7 +71,7 @@ public class UserProfileService {
             throw new ResourceNotFoundException("This user has not uploaded a resume.");
         }
 
-        // Verify the requesting user is a connection of this profile
+        
         if (!profile.getConnectedUsernames().contains(requestingUsername)) {
             throw new SecurityException("You must be connected to this user to download their resume.");
         }

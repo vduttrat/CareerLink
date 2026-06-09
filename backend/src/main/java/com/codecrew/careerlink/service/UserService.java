@@ -57,7 +57,7 @@ public class UserService {
         );
         userRepository.save(user);
 
-        // Auto-create a matching UserProfile on registration
+        
         String profession = request.getDetails();
         if (profession == null || profession.trim().isEmpty()) {
             profession = "Professional";

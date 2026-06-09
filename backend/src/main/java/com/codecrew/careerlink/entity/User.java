@@ -24,13 +24,13 @@ public class User implements UserDetails {
     private String username;
 
     @Email(message = "Invalid email format")
-    @Column(unique = true, nullable = true) // Keeping nullable true temporarily to support existing users without email
+    @Column(unique = true, nullable = true)
     private String email;
 
     @Column(nullable = false)
     private String password;
 
-    private String role; // e.g. "ROLE_USER" or "ROLE_ADMIN"
+    private String role;
 
     @Column(nullable = false)
     private boolean emailVerified = false;
