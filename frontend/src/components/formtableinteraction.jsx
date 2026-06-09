@@ -1,4 +1,3 @@
-import CareerlinkForm from "./form";
 import Table from "react-bootstrap/Table";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
@@ -20,9 +19,9 @@ export default function CareerlinkFormTable({ authToken, onFollowToggle }){
                 const states = {};
                 data.forEach(profile => {
                     if (currentUsername && profile.connectedUsernames.includes(currentUsername)) {
-                        states[profile.id] = "connected";
+                        states[profile.id] = "followed";
                     } else {
-                        states[profile.id] = "disconnected";
+                        states[profile.id] = "unfollowed";
                     }
                 });
                 setFollowStates(states);
@@ -36,34 +35,6 @@ export default function CareerlinkFormTable({ authToken, onFollowToggle }){
         fetchProfiles();
     }, [fetchProfiles, authToken]);
 
-    let updateTable = async (name, proff, details) => {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            alert("Please Sign In in the sidebar before adding your profile.");
-            return;
-        }
-
-        try {
-            const response = await fetch("http://localhost:8080/api/profiles", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify({ name, profession: proff, details })
-            });
-
-            if (response.ok) {
-                fetchProfiles();
-            } else {
-                const errData = await response.json();
-                alert(errData.error || "Failed to create profile. Ensure inputs are valid.");
-            }
-        } catch (err) {
-            console.error("Error adding profile to backend", err);
-            alert("Could not connect to backend to save profile.");
-        }
-    }
 
     const handleConnectClick = async (profileId) => {
         const token = localStorage.getItem("token");
@@ -116,10 +87,7 @@ export default function CareerlinkFormTable({ authToken, onFollowToggle }){
     });
 
     return(
-        <>
-            <CareerlinkForm addRowData={([name,proff,det])=>{updateTable(name,proff,det)}}/>
-            
-            <Container className="my-5">
+        <Container className="my-5">
                 <div className="glass-panel p-4">
                     <h3 className="mb-4 text-start fw-bold" style={{ color: "var(--accent-cyan)", letterSpacing: "0.05em" }}>Talent Profiles</h3>
                     
@@ -157,8 +125,11 @@ export default function CareerlinkFormTable({ authToken, onFollowToggle }){
                                         label = "Following...";
                                     } else if (cState === "followed") {
                                         badgeClass = "badge-connected";
-                                        label = "Following";
+                                        label = "Unfollow";
                                     }
+
+                                    const currentUsername = localStorage.getItem("username");
+                                    const isSelf = currentUsername && profile.name.toLowerCase() === currentUsername.toLowerCase();
 
                                     return (
                                     <tr key={userId}>
@@ -167,12 +138,18 @@ export default function CareerlinkFormTable({ authToken, onFollowToggle }){
                                         <td> <span className="badge bg-secondary opacity-75">{profile.profession}</span> </td>
                                         <td> {profile.details} </td>
                                         <td> 
-                                            <span 
-                                                className={`connection-badge ${badgeClass}`}
-                                                onClick={() => handleConnectClick(userId)}
-                                            >
-                                                {label}
-                                            </span>
+                                            {isSelf ? (
+                                                <span className="connection-badge badge-connected" style={{ cursor: "default", opacity: 0.7 }}>
+                                                    You
+                                                </span>
+                                            ) : (
+                                                <span 
+                                                    className={`connection-badge ${badgeClass}`}
+                                                    onClick={() => handleConnectClick(userId)}
+                                                >
+                                                    {label}
+                                                </span>
+                                            )}
                                         </td>
                                     </tr>
                                     );
@@ -186,8 +163,7 @@ export default function CareerlinkFormTable({ authToken, onFollowToggle }){
                         </Table>
                     </div>
                 </div>
-            </Container>
-        </>
+        </Container>
     )
 }
 

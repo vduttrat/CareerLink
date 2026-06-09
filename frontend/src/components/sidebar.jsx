@@ -12,8 +12,24 @@ export default function Sidebar({ onAuthChange }) {
     let [ show, setShow ] = useState(false);
     let [ showResumeModal, setShowResumeModal ] = useState(false);
     let [ uploading, setUploading ] = useState(false);
+    let [ hasResume, setHasResume ] = useState(false);
     const resumeFileRef = useRef(null);
  
+    const checkResumeStatus = async (token, username) => {
+        try {
+            const response = await fetch("http://localhost:8080/api/profiles", {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+            if (response.ok) {
+                const profiles = await response.json();
+                const myProfile = profiles.find(p => p.name.toLowerCase() === username.toLowerCase());
+                setHasResume(myProfile?.hasResume || false);
+            }
+        } catch (err) {
+            console.error("Failed to check resume status", err);
+        }
+    };
+
     useEffect(() => {
         const token = localStorage.getItem("token");
         const username = localStorage.getItem("username");
@@ -22,6 +38,7 @@ export default function Sidebar({ onAuthChange }) {
             setName(username);
             setDetails(userDetails || "Interactive Member");
             LogIn(true);
+            checkResumeStatus(token, username);
         }
     }, []);
  
@@ -33,6 +50,7 @@ export default function Sidebar({ onAuthChange }) {
             LogIn(false);
             setName("");
             setDetails("Interactive Member")
+            setHasResume(false);
             if (onAuthChange) onAuthChange();
         }
         else{
@@ -114,6 +132,7 @@ export default function Sidebar({ onAuthChange }) {
 
             if (response.ok) {
                 setShowResumeModal(false);
+                setHasResume(true);
                 alert("Resume uploaded successfully! Your followers can now download it.");
             } else {
                 const errData = await response.json();
@@ -154,6 +173,34 @@ export default function Sidebar({ onAuthChange }) {
             <h3 className="fs-4 fw-bold text-light mb-1">{getName()}</h3>
             <p className="fs-6 text-muted mb-0" style={{ letterSpacing: "0.05em" }}>{details}</p>
         </div>
+
+        {loggedIn && !hasResume && (
+            <button
+                className="btn w-100 mb-3"
+                onClick={() => setShowResumeModal(true)}
+                style={{
+                    background: "linear-gradient(135deg, rgba(0,242,254,0.12), rgba(79,172,254,0.12))",
+                    color: "var(--accent-cyan)",
+                    border: "1px solid rgba(0,242,254,0.3)",
+                    borderRadius: "2rem",
+                    padding: "0.65rem 1.5rem",
+                    fontWeight: "600",
+                    fontSize: "0.9rem",
+                    letterSpacing: "0.03em",
+                    transition: "all 0.3s ease"
+                }}
+                onMouseEnter={(e) => {
+                    e.target.style.background = "linear-gradient(135deg, rgba(0,242,254,0.25), rgba(79,172,254,0.25))";
+                    e.target.style.boxShadow = "0 0 15px rgba(0,242,254,0.2)";
+                }}
+                onMouseLeave={(e) => {
+                    e.target.style.background = "linear-gradient(135deg, rgba(0,242,254,0.12), rgba(79,172,254,0.12))";
+                    e.target.style.boxShadow = "none";
+                }}
+            >
+                📄 Upload Resume
+            </button>
+        )}
 
         <button 
             className={`btn w-100 ${loggedIn ? "btn-outline-danger" : "btn-glow"}`} 
