@@ -22,19 +22,22 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final EmailService emailService;
 
     public UserService(
             UserRepository userRepository,
             UserProfileRepository userProfileRepository,
             PasswordEncoder passwordEncoder,
             JwtService jwtService,
-            AuthenticationManager authenticationManager
+            AuthenticationManager authenticationManager,
+            EmailService emailService
     ) {
         this.userRepository = userRepository;
         this.userProfileRepository = userProfileRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
+        this.emailService = emailService;
     }
 
     @Transactional
@@ -42,9 +45,13 @@ public class UserService {
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new IllegalArgumentException("Username already exists");
         }
+        if (request.getEmail() != null && userRepository.existsByEmail(request.getEmail())) {
+            throw new IllegalArgumentException("Email already exists");
+        }
 
         User user = new User(
                 request.getUsername(),
+                request.getEmail(),
                 passwordEncoder.encode(request.getPassword()),
                 "ROLE_USER"
         );
@@ -58,6 +65,12 @@ public class UserService {
         String details = "Professional Account";
         UserProfile profile = new UserProfile(request.getUsername(), profession, details);
         userProfileRepository.save(profile);
+
+        if (user.getEmail() != null && !user.getEmail().trim().isEmpty()) {
+            emailService.sendWelcomeEmail(user.getEmail(), user.getUsername());
+            user.setWelcomeEmailSent(true);
+            userRepository.save(user);
+        }
 
         String jwtToken = jwtService.generateToken(user);
         return new AuthResponse(jwtToken, user.getUsername(), user.getRole(), request.getDetails());
@@ -73,6 +86,12 @@ public class UserService {
 
         User user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid username or password"));
+
+        if (!user.isWelcomeEmailSent() && user.getEmail() != null && !user.getEmail().trim().isEmpty()) {
+            emailService.sendWelcomeEmail(user.getEmail(), user.getUsername());
+            user.setWelcomeEmailSent(true);
+            userRepository.save(user);
+        }
 
         String jwtToken = jwtService.generateToken(user);
         return new AuthResponse(jwtToken, user.getUsername(), user.getRole(), "Professional Account");

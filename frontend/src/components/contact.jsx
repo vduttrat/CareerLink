@@ -18,15 +18,15 @@ export default function Contact() {
     if (form.checkValidity() === false) {
       event.stopPropagation();
     } else {
-      const name = form.elements[0].value;
-      const email = form.elements[1].value;
-      const message = form.elements[2].value;
+      const fullName = localStorage.getItem("username") || "Anonymous";
+      const subject = "Contact Form Submission";
+      const message = form.elements[0].value;
 
       try {
         const response = await fetch("http://localhost:8080/api/contacts", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, email, message })
+          body: JSON.stringify({ fullName, subject, message })
         });
 
         if (response.ok) {
@@ -45,17 +45,17 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" style={{ padding: "3rem 0", color: "white" }}>
+    <section id="contact" style={{ padding: "4rem 0", color: "white" }}>
       <Container>
         <div className="text-center mb-5">
-          <h2 className="display-4 fw-bold" style={{ textShadow: "0 4px 12px rgba(0,0,0,0.6)" }}>Contact Us</h2>
+          <h2 className="display-5 fw-bold mb-3">Contact Us</h2>
           <p className="lead mx-auto text-light opacity-75" style={{ maxWidth: "600px" }}>
-            Have questions, feedback, or ideas? We'd love to hear from you. Get in touch with our team today!
+            Have questions, feedback, or ideas? We'd love to hear from you.
           </p>
         </div>
 
         <Row className="justify-content-center">
-          <Col lg={8}>
+          <Col lg={8} xl={7}>
             <div className="glass-panel text-start p-4 p-md-5">
               {success && (
                 <Alert variant="success" className="border-0 text-center mb-4" style={{ backgroundColor: "rgba(46, 213, 115, 0.2)", color: "#2ed573" }}>
@@ -64,36 +64,11 @@ export default function Contact() {
               )}
 
               <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                <Row className="g-3 mb-3">
-                  <Col md={6}>
-                    <Form.Group id="contact-name">
-                      <Form.Label className="fw-semibold">Name</Form.Label>
-                      <Form.Control 
-                        type="text" 
-                        placeholder="Your Name" 
-                        required 
-                        className="custom-input"
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col md={6}>
-                    <Form.Group id="contact-email">
-                      <Form.Label className="fw-semibold">Email address</Form.Label>
-                      <Form.Control 
-                        type="email" 
-                        placeholder="name@example.com" 
-                        required 
-                        className="custom-input"
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
-
                 <Form.Group className="mb-4" id="contact-message">
                   <Form.Label className="fw-semibold">Message</Form.Label>
                   <Form.Control 
                     as="textarea" 
-                    rows={4} 
+                    rows={6} 
                     placeholder="Type your message here..." 
                     required 
                     className="custom-input"
@@ -103,7 +78,7 @@ export default function Contact() {
                 <div className="text-center">
                   <Button 
                     type="submit" 
-                    className="btn-glow px-5 text-uppercase tracking-wider"
+                    className="btn-glow px-5 py-2 fw-bold text-uppercase tracking-wider w-100-mobile"
                   >
                     Send Message
                   </Button>

@@ -65,6 +65,7 @@ export default function Sidebar({ onAuthChange }) {
     let handleSave = async (event) => {
         event.preventDefault();
         const username = event.currentTarget.elements.username.value;
+        const email = event.currentTarget.elements.email.value;
         const password = event.currentTarget.elements.password.value;
         const userDetails = event.currentTarget.elements.details.value;
  
@@ -72,14 +73,14 @@ export default function Sidebar({ onAuthChange }) {
             let response = await fetch("http://localhost:8080/api/auth/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, password })
+                body: JSON.stringify({ username, email, password })
             });
  
             if (!response.ok) {
                 response = await fetch("http://localhost:8080/api/auth/register", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ username, password, details: userDetails })
+                    body: JSON.stringify({ username, email, password, details: userDetails })
                 });
             }
  
@@ -219,8 +220,17 @@ export default function Sidebar({ onAuthChange }) {
                 <Form.Label className="fw-semibold">Username</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Enter your name"
+                  placeholder="Enter your username"
                   autoFocus
+                  required
+                  className="custom-input"
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="email">
+                <Form.Label className="fw-semibold">Email Address</Form.Label>
+                <Form.Control
+                  type="email"
+                  placeholder="name@example.com"
                   required
                   className="custom-input"
                 />

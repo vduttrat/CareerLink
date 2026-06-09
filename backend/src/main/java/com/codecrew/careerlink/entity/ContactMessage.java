@@ -13,14 +13,13 @@ public class ContactMessage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Name is required")
+    @NotBlank(message = "Full Name is required")
     @Column(nullable = false)
-    private String name;
+    private String fullName;
 
-    @NotBlank(message = "Email is required")
-    @Email(message = "Invalid email format")
+    @NotBlank(message = "Subject is required")
     @Column(nullable = false)
-    private String email;
+    private String subject;
 
     @NotBlank(message = "Message cannot be empty")
     @Size(min = 5, message = "Message must be at least 5 characters long")
@@ -29,9 +28,9 @@ public class ContactMessage {
 
     public ContactMessage() {}
 
-    public ContactMessage(String name, String email, String message) {
-        this.name = name;
-        this.email = email;
+    public ContactMessage(String fullName, String subject, String message) {
+        this.fullName = fullName;
+        this.subject = subject;
         this.message = message;
     }
 
@@ -43,20 +42,20 @@ public class ContactMessage {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
-    public String getEmail() {
-        return email;
+    public String getSubject() {
+        return subject;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     public String getMessage() {
