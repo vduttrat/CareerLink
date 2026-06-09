@@ -2,17 +2,17 @@ import { useState, useEffect, useCallback } from "react";
 import Container from "react-bootstrap/Container";
 import profileicon from "./profileicon.png";
 
-export default function Connections({ authToken, updateTrigger }) {
-    const [connections, setConnections] = useState([]);
+export default function Following({ authToken, updateTrigger }) {
+    const [following, setFollowing] = useState([]);
     const [loading, setLoading] = useState(true);
     const [downloadingId, setDownloadingId] = useState(null);
 
-    const fetchConnections = useCallback(async () => {
+    const fetchFollowing = useCallback(async () => {
         const token = localStorage.getItem("token");
         const currentUsername = localStorage.getItem("username");
 
         if (!token || !currentUsername) {
-            setConnections([]);
+            setFollowing([]);
             setLoading(false);
             return;
         }
@@ -25,21 +25,21 @@ export default function Connections({ authToken, updateTrigger }) {
             if (response.ok) {
                 const allProfiles = await response.json();
 
-                const myConnections = allProfiles.filter(profile =>
+                const myFollowing = allProfiles.filter(profile =>
                     profile.connectedUsernames && profile.connectedUsernames.includes(currentUsername)
                 );
-                setConnections(myConnections);
+                setFollowing(myFollowing);
             }
         } catch (err) {
-            console.error("Failed to fetch connections", err);
+            console.error("Failed to fetch following", err);
         } finally {
             setLoading(false);
         }
     }, []);
 
     useEffect(() => {
-        fetchConnections();
-    }, [fetchConnections, authToken, updateTrigger]);
+        fetchFollowing();
+    }, [fetchFollowing, authToken, updateTrigger]);
 
     const handleDownloadResume = async (profileId, profileName) => {
         const token = localStorage.getItem("token");
@@ -93,7 +93,7 @@ export default function Connections({ authToken, updateTrigger }) {
             <div className="glass-panel p-4">
                 <div className="d-flex align-items-center justify-content-between mb-4">
                     <h3 className="mb-0 fw-bold" style={{ color: "var(--accent-cyan)", letterSpacing: "0.05em" }}>
-                        My Connections
+                        Following
                     </h3>
                     <span className="badge" style={{
                         background: "linear-gradient(135deg, rgba(0,242,254,0.2), rgba(79,172,254,0.2))",
@@ -103,29 +103,29 @@ export default function Connections({ authToken, updateTrigger }) {
                         borderRadius: "20px",
                         border: "1px solid rgba(0,242,254,0.3)"
                     }}>
-                        {connections.length} connection{connections.length !== 1 ? "s" : ""}
+                        {following.length} following
                     </span>
                 </div>
 
                 {!isLoggedIn ? (
                     <div className="text-center py-5">
-                        <p className="text-muted fs-5">Sign in to view your professional connections</p>
+                        <p className="text-muted fs-5">Sign in to see who you're following</p>
                     </div>
                 ) : loading ? (
                     <div className="text-center py-5">
                         <div className="spinner-border text-info" role="status">
                             <span className="visually-hidden">Loading...</span>
                         </div>
-                        <p className="text-muted mt-3">Loading connections...</p>
+                        <p className="text-muted mt-3">Loading...</p>
                     </div>
-                ) : connections.length === 0 ? (
+                ) : following.length === 0 ? (
                     <div className="text-center py-5">
-                        <p className="text-muted fs-5">No connections yet</p>
-                        <p className="text-muted small">Visit the Profiles section and connect with professionals to see them here.</p>
+                        <p className="text-muted fs-5">Not following anyone yet</p>
+                        <p className="text-muted small">Visit the Profiles section and follow professionals to see them here.</p>
                     </div>
                 ) : (
                     <div className="row g-4">
-                        {connections.map((profile) => (
+                        {following.map((profile) => (
                             <div key={profile.id} className="col-12 col-sm-6 col-lg-4">
                                 <div className="connection-card h-100">
                                     <div className="text-center mb-3">
@@ -152,7 +152,7 @@ export default function Connections({ authToken, updateTrigger }) {
                                     </p>
                                     <div className="text-center mt-auto">
                                         <span className="connection-badge badge-connected mb-2 d-inline-block">
-                                            Connected
+                                            Following
                                         </span>
                                         {profile.hasResume && (
                                             <button

@@ -6,19 +6,19 @@ import Sidebar from './components/sidebar';
 import CareerlinkCarousel from './components/carousel';
 import CareerlinkFormTable from './components/formtableinteraction';
 import About from './components/about';
-import Connections from './components/connections';
+import Following from './components/following';
 import Contact from './components/contact';
 
 function App() {
   const [authToken, setAuthToken] = React.useState(localStorage.getItem("token"));
-  const [connectionsUpdateTrigger, setConnectionsUpdateTrigger] = React.useState(0);
+  const [followUpdateTrigger, setFollowUpdateTrigger] = React.useState(0);
 
   const handleAuthChange = () => {
     setAuthToken(localStorage.getItem("token"));
   };
 
-  const handleConnectionToggle = () => {
-    setConnectionsUpdateTrigger(prev => prev + 1);
+  const handleFollowToggle = () => {
+    setFollowUpdateTrigger(prev => prev + 1);
   };
 
   return (
@@ -45,11 +45,11 @@ function App() {
             </div>
             <hr className="text-light opacity-25 my-5" />
             <div id="profiles" className="pt-2">
-              <CareerlinkFormTable authToken={authToken} onConnectionToggle={handleConnectionToggle} />
+              <CareerlinkFormTable authToken={authToken} onFollowToggle={handleFollowToggle} />
             </div>
             <hr className="text-light opacity-25 my-5" />
-            <div id="connections" className="pt-2">
-              <Connections authToken={authToken} updateTrigger={connectionsUpdateTrigger} />
+            <div id="following" className="pt-2">
+              <Following authToken={authToken} updateTrigger={followUpdateTrigger} />
             </div>
             <hr className="text-light opacity-25 my-5" />
             <div id="contact" className="pt-2">

@@ -114,7 +114,7 @@ export default function Sidebar({ onAuthChange }) {
 
             if (response.ok) {
                 setShowResumeModal(false);
-                alert("Resume uploaded successfully! Your connections can now download it.");
+                alert("Resume uploaded successfully! Your followers can now download it.");
             } else {
                 const errData = await response.json();
                 alert(errData.error || "Failed to upload resume. Make sure you have a profile created first.");
@@ -211,7 +211,7 @@ export default function Sidebar({ onAuthChange }) {
           </Modal.Header>
           <Modal.Body className="p-4">
             <p className="text-muted mb-3" style={{ fontSize: "0.9rem" }}>
-              Upload your resume so that your connections can download it. This is optional - you can always upload later.
+              Upload your resume so that your followers can download it. This is optional - you can always upload later.
             </p>
             <Form.Group className="mb-4">
               <Form.Label className="fw-semibold">Select PDF Resume</Form.Label>

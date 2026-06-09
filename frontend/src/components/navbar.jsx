@@ -33,7 +33,7 @@ export default function CareerlinkNavbar() {
                 <a className="m-2 text-decoration-none" style={{fontSize:"0.85rem"}} href="#profiles">Profiles</a>
               </Navbar.Text>
               <Navbar.Text>
-                <a className="m-2 text-decoration-none" style={{fontSize:"0.85rem"}} href="#connections">Connections</a>
+                <a className="m-2 text-decoration-none" style={{fontSize:"0.85rem"}} href="#following">Following</a>
               </Navbar.Text>
               <Navbar.Text>
                 <a className="m-2 text-decoration-none" style={{fontSize:"0.85rem"}} href="#contact">Contact Us</a>

@@ -4,10 +4,10 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import { useState, useEffect, useCallback } from "react";
 
-export default function CareerlinkFormTable({ authToken, onConnectionToggle }){
+export default function CareerlinkFormTable({ authToken, onFollowToggle }){
     let [ userData , setData ] = useState([]);
     let [ searchTerm, setSearchTerm ] = useState("");
-    let [ connectionStates, setConnectionStates ] = useState({});
+    let [ followStates, setFollowStates ] = useState({});
 
     const fetchProfiles = useCallback(async () => {
         try {
@@ -25,7 +25,7 @@ export default function CareerlinkFormTable({ authToken, onConnectionToggle }){
                         states[profile.id] = "disconnected";
                     }
                 });
-                setConnectionStates(states);
+                setFollowStates(states);
             }
         } catch (err) {
             console.error("Error fetching profiles from backend", err);
@@ -68,14 +68,14 @@ export default function CareerlinkFormTable({ authToken, onConnectionToggle }){
     const handleConnectClick = async (profileId) => {
         const token = localStorage.getItem("token");
         if (!token) {
-            alert("Please Sign In in the sidebar to establish professional connections.");
+            alert("Please Sign In in the sidebar to follow professionals.");
             return;
         }
 
-        const currentState = connectionStates[profileId] || "disconnected";
-        if (currentState === "connecting") return;
+        const currentState = followStates[profileId] || "unfollowed";
+        if (currentState === "following-loading") return;
 
-        setConnectionStates(prev => ({ ...prev, [profileId]: "connecting" }));
+        setFollowStates(prev => ({ ...prev, [profileId]: "following-loading" }));
 
         try {
             const response = await fetch(`http://localhost:8080/api/profiles/${profileId}/connect`, {
@@ -88,25 +88,25 @@ export default function CareerlinkFormTable({ authToken, onConnectionToggle }){
             if (response.ok) {
                 const updatedProfile = await response.json();
                 const currentUsername = localStorage.getItem("username");
-                const isNowConnected = updatedProfile.connectedUsernames.includes(currentUsername);
+                const isNowFollowing = updatedProfile.connectedUsernames.includes(currentUsername);
                 
-                setConnectionStates(prev => ({ 
+                setFollowStates(prev => ({ 
                     ...prev, 
-                    [profileId]: isNowConnected ? "connected" : "disconnected" 
+                    [profileId]: isNowFollowing ? "followed" : "unfollowed" 
                 }));
                 
                 fetchProfiles();
-                if (onConnectionToggle) {
-                    onConnectionToggle();
+                if (onFollowToggle) {
+                    onFollowToggle();
                 }
             } else {
-                setConnectionStates(prev => ({ ...prev, [profileId]: currentState }));
-                alert("Failed to toggle connection. Session might be expired.");
+                setFollowStates(prev => ({ ...prev, [profileId]: currentState }));
+                alert("Failed to toggle follow. Session might be expired.");
             }
         } catch (err) {
-            console.error("Connection toggle API error", err);
-            setConnectionStates(prev => ({ ...prev, [profileId]: currentState }));
-            alert("Could not toggle connection status on server.");
+            console.error("Follow toggle API error", err);
+            setFollowStates(prev => ({ ...prev, [profileId]: currentState }));
+            alert("Could not toggle follow status on server.");
         }
     };
 
@@ -148,16 +148,16 @@ export default function CareerlinkFormTable({ authToken, onConnectionToggle }){
                             {filteredUsers.length > 0 ? (
                                 filteredUsers.map((profile) => {
                                     const userId = profile.id;
-                                    const cState = connectionStates[userId] || "disconnected";
+                                    const cState = followStates[userId] || "unfollowed";
                                     
                                     let badgeClass = "badge-disconnected";
-                                    let label = "Connect";
-                                    if (cState === "connecting") {
+                                    let label = "Follow";
+                                    if (cState === "following-loading") {
                                         badgeClass = "badge-connecting";
-                                        label = "Connecting...";
-                                    } else if (cState === "connected") {
+                                        label = "Following...";
+                                    } else if (cState === "followed") {
                                         badgeClass = "badge-connected";
-                                        label = "Connected";
+                                        label = "Following";
                                     }
 
                                     return (
