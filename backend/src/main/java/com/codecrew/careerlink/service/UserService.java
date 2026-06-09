@@ -73,7 +73,7 @@ public class UserService {
         }
 
         String jwtToken = jwtService.generateToken(user);
-        return new AuthResponse(jwtToken, user.getUsername(), user.getRole(), request.getDetails());
+        return new AuthResponse(jwtToken, user.getEmail(), user.getRole(), request.getDetails());
     }
 
     public AuthResponse login(AuthRequest request) {
@@ -94,6 +94,6 @@ public class UserService {
         }
 
         String jwtToken = jwtService.generateToken(user);
-        return new AuthResponse(jwtToken, user.getUsername(), user.getRole(), "Professional Account");
+        return new AuthResponse(jwtToken, user.getEmail(), user.getRole(), "Professional Account");
     }
 }

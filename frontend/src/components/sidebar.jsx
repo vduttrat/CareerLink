@@ -32,7 +32,7 @@ export default function Sidebar({ onAuthChange }) {
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-        const username = localStorage.getItem("username");
+        const username = localStorage.getItem("name");
         const userDetails = localStorage.getItem("details");
         if (token && username) {
             setName(username);
@@ -89,6 +89,7 @@ export default function Sidebar({ onAuthChange }) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("username", data.username);
                 localStorage.setItem("details", data.details || userDetails);
+                localStorage.setItem("name",username);
                 
                 setName(data.username);
                 setDetails(data.details || userDetails);
