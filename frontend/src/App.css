@@ -20,7 +20,7 @@ body {
 
 /* Glassmorphism styling */
 .glass-panel {
-  background: var(--glass-bg);
+  background: var(--glass-bg) !important;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--glass-border);
@@ -30,7 +30,7 @@ body {
 }
 
 .glass-panel:hover {
-  background: var(--glass-hover);
+  background: var(--glass-hover) !important;
   border-color: rgba(255, 255, 255, 0.2);
   transform: translateY(-5px);
   box-shadow: 0 12px 40px 0 rgba(130, 87, 229, 0.25);
@@ -128,6 +128,27 @@ body {
 @keyframes pulse-orange {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.6; }
+}
+
+/* Connection Card Styles */
+.connection-card {
+  background: rgba(8, 7, 44, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 1.25rem;
+  padding: 1.75rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.connection-card:hover {
+  background: rgba(8, 7, 44, 0.75);
+  border-color: rgba(0, 242, 254, 0.25);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 35px rgba(0, 242, 254, 0.12);
 }
 
 /* Sidebar Responsive Positioning */

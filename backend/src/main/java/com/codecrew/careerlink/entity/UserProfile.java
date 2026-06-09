@@ -30,6 +30,12 @@ public class UserProfile {
     @Column(name = "username")
     private Set<String> connectedUsernames = new HashSet<>();
 
+    @Lob
+    @Column(columnDefinition = "LONGBLOB")
+    private byte[] resumeData;
+
+    private String resumeFilename;
+
     public UserProfile() {}
 
     public UserProfile(String name, String profession, String details) {
@@ -76,5 +82,21 @@ public class UserProfile {
 
     public void setConnectedUsernames(Set<String> connectedUsernames) {
         this.connectedUsernames = connectedUsernames;
+    }
+
+    public byte[] getResumeData() {
+        return resumeData;
+    }
+
+    public void setResumeData(byte[] resumeData) {
+        this.resumeData = resumeData;
+    }
+
+    public String getResumeFilename() {
+        return resumeFilename;
+    }
+
+    public void setResumeFilename(String resumeFilename) {
+        this.resumeFilename = resumeFilename;
     }
 }

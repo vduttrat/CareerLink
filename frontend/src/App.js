@@ -6,9 +6,21 @@ import Sidebar from './components/sidebar';
 import CareerlinkCarousel from './components/carousel';
 import CareerlinkFormTable from './components/formtableinteraction';
 import About from './components/about';
+import Connections from './components/connections';
 import Contact from './components/contact';
 
 function App() {
+  const [authToken, setAuthToken] = React.useState(localStorage.getItem("token"));
+  const [connectionsUpdateTrigger, setConnectionsUpdateTrigger] = React.useState(0);
+
+  const handleAuthChange = () => {
+    setAuthToken(localStorage.getItem("token"));
+  };
+
+  const handleConnectionToggle = () => {
+    setConnectionsUpdateTrigger(prev => prev + 1);
+  };
+
   return (
     <div className="App">
       <CareerlinkNavbar />
@@ -19,7 +31,7 @@ function App() {
         <div className="row px-2 px-md-4">
           {/* Sidebar - top/full on mobile, sticky on desktop */}
           <div className="col-12 col-md-3 mb-5 mb-md-0">
-            <Sidebar />
+            <Sidebar onAuthChange={handleAuthChange} />
           </div>
           
           {/* Main scrollable section contents */}
@@ -33,7 +45,11 @@ function App() {
             </div>
             <hr className="text-light opacity-25 my-5" />
             <div id="profiles" className="pt-2">
-              <CareerlinkFormTable />
+              <CareerlinkFormTable authToken={authToken} onConnectionToggle={handleConnectionToggle} />
+            </div>
+            <hr className="text-light opacity-25 my-5" />
+            <div id="connections" className="pt-2">
+              <Connections authToken={authToken} updateTrigger={connectionsUpdateTrigger} />
             </div>
             <hr className="text-light opacity-25 my-5" />
             <div id="contact" className="pt-2">

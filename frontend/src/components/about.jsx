@@ -8,23 +8,19 @@ export default function About() {
   const features = [
     {
       title: "Our Mission",
-      description: "To bridge the gap between talented individuals and career milestones by nurturing meaningful interactions.",
-      icon: "🎯"
+      description: "To bridge the gap between talented individuals and career milestones by nurturing meaningful interactions."
     },
     {
       title: "Elevate Networks",
-      description: "Establish robust, dynamic links with industry pioneers, software developers, AI researchers, and marketers.",
-      icon: "🌐"
+      description: "Establish robust, dynamic links with industry pioneers, software developers, AI researchers, and marketers."
     },
     {
       title: "Interactive Collaboration",
-      description: "Connect instantly with peer members, share feedback, and discover mutual growth areas.",
-      icon: "🤝"
+      description: "Connect instantly with peer members, share feedback, and discover mutual growth areas."
     },
     {
       title: "Talent Showcases",
-      description: "Broadcast your expertise, portfolio, and credentials to catch the eye of potential recruiters and partners.",
-      icon: "🚀"
+      description: "Broadcast your expertise, portfolio, and credentials to catch the eye of potential recruiters and partners."
     }
   ];
 
@@ -49,7 +45,6 @@ export default function About() {
               >
                 <Card.Body className="d-flex flex-column justify-content-between text-start">
                   <div>
-                    <div style={{ fontSize: "2.8rem" }} className="mb-3">{feature.icon}</div>
                     <Card.Title className="fs-4 fw-bold mb-2" style={{ color: "var(--accent-cyan)" }}>{feature.title}</Card.Title>
                     <Card.Text style={{ opacity: 0.85, fontSize: "0.95rem", lineHeight: "1.6" }}>
                       {feature.description}

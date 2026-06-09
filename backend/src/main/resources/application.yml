@@ -6,13 +6,17 @@ spring:
     name: careerlink
   profiles:
     active: mysql # default profile runs H2 in-memory database
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
   # Configuration for Default Profile (H2 In-Memory)
   datasource:
     url: jdbc:h2:mem:careerlinkdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     driver-class-name: org.h2.Driver
     username: sa
-    password: password
+    password: your_password_here
   h2:
     console:
       enabled: true
@@ -51,8 +55,8 @@ spring:
       on-profile: mysql
   datasource:
     url: jdbc:mysql://localhost:3306/careerlink?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-    username: user
-    password: password
+    username: careerlink_user
+    password: your_password_here
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MariaDBDialect

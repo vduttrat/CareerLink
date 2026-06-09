@@ -4,12 +4,11 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import { useState, useEffect, useCallback } from "react";
 
-export default function CareerlinkFormTable(){
+export default function CareerlinkFormTable({ authToken, onConnectionToggle }){
     let [ userData , setData ] = useState([]);
     let [ searchTerm, setSearchTerm ] = useState("");
     let [ connectionStates, setConnectionStates ] = useState({});
 
-    // Fetch all profiles from API
     const fetchProfiles = useCallback(async () => {
         try {
             const response = await fetch("http://localhost:8080/api/profiles");
@@ -17,7 +16,6 @@ export default function CareerlinkFormTable(){
                 const data = await response.json();
                 setData(data);
                 
-                // Map connection states based on stored username
                 const currentUsername = localStorage.getItem("username");
                 const states = {};
                 data.forEach(profile => {
@@ -36,7 +34,7 @@ export default function CareerlinkFormTable(){
 
     useEffect(() => {
         fetchProfiles();
-    }, [fetchProfiles]);
+    }, [fetchProfiles, authToken]);
 
     let updateTable = async (name, proff, details) => {
         const token = localStorage.getItem("token");
@@ -56,7 +54,7 @@ export default function CareerlinkFormTable(){
             });
 
             if (response.ok) {
-                fetchProfiles(); // Refresh the list from the database
+                fetchProfiles();
             } else {
                 const errData = await response.json();
                 alert(errData.error || "Failed to create profile. Ensure inputs are valid.");
@@ -77,7 +75,6 @@ export default function CareerlinkFormTable(){
         const currentState = connectionStates[profileId] || "disconnected";
         if (currentState === "connecting") return;
 
-        // Optimistically set to connecting
         setConnectionStates(prev => ({ ...prev, [profileId]: "connecting" }));
 
         try {
@@ -98,8 +95,10 @@ export default function CareerlinkFormTable(){
                     [profileId]: isNowConnected ? "connected" : "disconnected" 
                 }));
                 
-                // Refresh full list to keep connection lists in sync
                 fetchProfiles();
+                if (onConnectionToggle) {
+                    onConnectionToggle();
+                }
             } else {
                 setConnectionStates(prev => ({ ...prev, [profileId]: currentState }));
                 alert("Failed to toggle connection. Session might be expired.");
@@ -124,11 +123,10 @@ export default function CareerlinkFormTable(){
                 <div className="glass-panel p-4">
                     <h3 className="mb-4 text-start fw-bold" style={{ color: "var(--accent-cyan)", letterSpacing: "0.05em" }}>Talent Profiles</h3>
                     
-                    {/* Search Input */}
                     <div className="mb-4">
                         <Form.Control
                             type="text"
-                            placeholder="🔍 Search profiles by name or profession..."
+                            placeholder="Search profiles by name or profession..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="custom-input w-100"
@@ -159,7 +157,7 @@ export default function CareerlinkFormTable(){
                                         label = "Connecting...";
                                     } else if (cState === "connected") {
                                         badgeClass = "badge-connected";
-                                        label = "Connected ✓";
+                                        label = "Connected";
                                     }
 
                                     return (

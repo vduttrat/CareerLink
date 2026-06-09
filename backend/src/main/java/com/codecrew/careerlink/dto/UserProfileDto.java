@@ -17,14 +17,17 @@ public class UserProfileDto {
 
     private Set<String> connectedUsernames;
 
+    private Boolean hasResume = false;
+
     public UserProfileDto() {}
 
-    public UserProfileDto(Long id, String name, String profession, String details, Set<String> connectedUsernames) {
+    public UserProfileDto(Long id, String name, String profession, String details, Set<String> connectedUsernames, Boolean hasResume) {
         this.id = id;
         this.name = name;
         this.profession = profession;
         this.details = details;
         this.connectedUsernames = connectedUsernames;
+        this.hasResume = hasResume != null ? hasResume : false;
     }
 
     public Long getId() {
@@ -66,4 +69,13 @@ public class UserProfileDto {
     public void setConnectedUsernames(Set<String> connectedUsernames) {
         this.connectedUsernames = connectedUsernames;
     }
+
+    public Boolean getHasResume() {
+        return hasResume;
+    }
+
+    public void setHasResume(Boolean hasResume) {
+        this.hasResume = hasResume != null ? hasResume : false;
+    }
 }
+
