@@ -173,7 +173,7 @@ export default function Sidebar({ onAuthChange }) {
 
         <div className="mb-4">
             <h3 className="fs-4 fw-bold text-light mb-1">{getName()}</h3>
-            <p className="fs-6 text-muted mb-0" style={{ letterSpacing: "0.05em" }}>{details}</p>
+            <p className="fs-6 text-light mb-0" style={{ letterSpacing: "0.05em" }}>{details}</p>
         </div>
 
         {loggedIn && !hasResume && (

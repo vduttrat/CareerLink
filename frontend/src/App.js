@@ -8,6 +8,7 @@ import CareerlinkFormTable from './components/formtableinteraction';
 import About from './components/about';
 import Following from './components/following';
 import Contact from './components/contact';
+import Footer from './components/footer';
 
 function App() {
   const [authToken, setAuthToken] = React.useState(localStorage.getItem("token"));
@@ -58,6 +59,7 @@ function App() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
